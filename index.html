@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kontrollpanel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Modernes Kontrollpanel</h1>
+  </header>
+  <main>
+    <div class="grid-container">
+      <div class="card" id="cpu"></div>
+      <div class="card" id="ram"></div>
+      <div class="card" id="disk"></div>
+      <div class="card" id="gpu"></div>
+      <div class="card" id="net"></div>
+      <div class="card" id="datetime"></div>
+      <div class="card" id="audio-control">
+        <h2>🔊 Audio-Steuerung</h2>
+        <label for="vol-range">Lautstärke:</label><br />
+        <input type="range" id="vol-range" min="0" max="100" value="50" /><br /><br />
+        <button id="mute-btn">Stumm</button>
+        <button id="playpause-btn">▶️ Play/Pause</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

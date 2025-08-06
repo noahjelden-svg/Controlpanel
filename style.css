@@ -1,0 +1,172 @@
+/* Modernes, dunkles Design mit Tiefe und sanften Effekten */
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background-color: #121212;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+header {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  background: linear-gradient(90deg, #0d0d0d 0%, #1f1f1f 100%);
+  border-bottom: 1px solid #333;
+  box-shadow: 0 2px 8px #0008;
+  user-select: text;
+}
+
+h1 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  color: #00aaff;
+  text-shadow: 0 0 8px #00aaff55;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: #1e1e1e;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  box-shadow:
+    0 0 15px #0008,
+    inset 0 0 10px #0006;
+  transition: box-shadow 0.35s ease, transform 0.3s ease;
+  will-change: box-shadow, transform;
+}
+
+.card:hover {
+  box-shadow:
+    0 0 30px #00aaffcc,
+    inset 0 0 15px #00aaff88;
+  transform: translateY(-5px);
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #00aaff;
+  text-shadow: 0 0 4px #00aaff66;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0.5rem 0 1rem 0;
+}
+
+input[type=range]:hover {
+  background: #00aaff;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #00aaff;
+  box-shadow: 0 0 8px #00aaffcc;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-top: -7px;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  background: #0099dd;
+  box-shadow: 0 0 12px #0099dddd;
+}
+
+input[type=range]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #00aaff;
+  box-shadow: 0 0 8px #00aaffcc;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type=range]::-moz-range-thumb:hover {
+  background: #0099dd;
+  box-shadow: 0 0 12px #0099dddd;
+}
+
+button {
+  background-color: #00aaff;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  padding: 0.6rem 1.25rem;
+  margin-right: 0.6rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 12px #00aaff88;
+  transition: background-color 0.25s ease, box-shadow 0.3s ease, transform 0.15s ease;
+  user-select: none;
+}
+
+button:hover {
+  background-color: #008ecc;
+  box-shadow: 0 6px 18px #008ecccc;
+  transform: translateY(-2px);
+}
+
+button:active {
+  background-color: #007bb3;
+  box-shadow: 0 3px 9px #006699cc;
+  transform: translateY(0);
+}
+
+button:focus {
+  outline: 2px solid #00aaff;
+  outline-offset: 2px;
+}
+
+/* Für kleinere Bildschirme: Mobile Anpassungen */
+@media (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  button {
+    width: 100%;
+    margin: 0.3rem 0;
+    font-size: 1.1rem;
+  }
+
+  input[type=range] {
+    height: 12px;
+  }
+}
