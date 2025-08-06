@@ -6,6 +6,8 @@ import psutil
 import datetime
 import keyboard
 import os
+import threading
+import webview  # <--- hier
 
 app = Flask(__name__)
 
@@ -111,5 +113,19 @@ def audio_playpause():
     keyboard.send('play/pause media')
     return jsonify({'status': 'ok'})
 
+def run_flask():
+    # Flask im Hintergrund starten (ohne Debug, ohne Reload)
+    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True
+    flask_thread.start()
+
+    # Warte optional ein paar Sekunden, bis der Server hoch ist (kann je nach Rechner nötig sein)
+    import time
+    time.sleep(1)
+
+    # Webview-Fenster mit deiner lokalen Seite öffnen
+    webview.create_window('Control Panel', 'http://127.0.0.1:5000/', width=800, height=600, resizable=True)
+    webview.start()
