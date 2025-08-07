@@ -7,14 +7,20 @@ import datetime
 import keyboard
 import os
 import threading
-import webview  # <--- hier
+import webview
+import time
+import socket
 
 app = Flask(__name__)
+cpu_usage = 0.0
 
 # Audio Interface initialisieren (Windows)
 devices = AudioUtilities.GetSpeakers()
 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))
+
+# Initialen CPU-Auslastungswert setzen, damit cpu_percent() nicht 0 zurückgibt
+psutil.cpu_percent(interval=None)
 
 @app.route('/')
 def index():
@@ -30,7 +36,8 @@ def style():
 
 @app.route('/api/system')
 def api_system():
-    cpu = psutil.cpu_percent()
+    global cpu_usage
+    cpu =cpu_usage
     ram = psutil.virtual_memory()
     disk = psutil.disk_usage('/')
     net_io = psutil.net_io_counters()
@@ -51,7 +58,7 @@ def api_system():
             })
     except ImportError:
         gpu_data = []
-
+    local_ip, lan_ip = get_ip_addresses()
     return jsonify({
         'cpu': {
             'usage_percent': cpu,
@@ -83,8 +90,27 @@ def api_system():
         'datetime': {
             'date': now.strftime("%Y-%m-%d"),
             'time': now.strftime("%H:%M:%S")
+        },
+        'ip': {
+            'localhost': local_ip,
+            'lan': lan_ip
         }
     })
+
+def get_ip_addresses():
+    # Always 127.0.0.1
+    local_ip = "127.0.0.1"
+    
+    # Try to get LAN IP by opening a dummy socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))  # doesn't actually send data
+        lan_ip = s.getsockname()[0]
+        s.close()
+    except Exception:
+        lan_ip = "Unavailable"
+
+    return local_ip, lan_ip
 
 # Audio-Lautstärke auslesen & setzen
 @app.route('/api/audio/volume', methods=['GET', 'POST'])
@@ -114,18 +140,26 @@ def audio_playpause():
     return jsonify({'status': 'ok'})
 
 def run_flask():
-    # Flask im Hintergrund starten (ohne Debug, ohne Reload)
+    # Flask im Hintergrund starten, ohne Debug und ohne Reload
     app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
+
+def cpu_monitor():
+    global cpu_usage
+    psutil.cpu_percent(interval=None)  # initialisieren
+    while True:
+        cpu_usage = psutil.cpu_percent(interval=1)  # blockiert 1 Sekunde
+
+monitor_thread = threading.Thread(target=cpu_monitor, daemon=True)
+monitor_thread.start()
 
 if __name__ == '__main__':
     flask_thread = threading.Thread(target=run_flask)
     flask_thread.daemon = True
     flask_thread.start()
 
-    # Warte optional ein paar Sekunden, bis der Server hoch ist (kann je nach Rechner nötig sein)
-    import time
+    # Kurze Pause, damit Flask-Server Zeit zum Starten hat
     time.sleep(1)
 
-    # Webview-Fenster mit deiner lokalen Seite öffnen
+    # Webview-Fenster öffnen
     webview.create_window('Control Panel', 'http://127.0.0.1:5000/', width=800, height=600, resizable=True)
     webview.start()

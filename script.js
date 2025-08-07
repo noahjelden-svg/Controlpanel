@@ -49,6 +49,14 @@ async function updateInfo() {
   }
 }
 
+
+fetch('/api/system')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('local-ip').textContent = data.ip.localhost;
+        document.getElementById('lan-ip').textContent = data.ip.lan;
+        // ... your existing data handling code
+    });
 // --- Audio Steuerung ---
 
 const volRange = document.getElementById('vol-range');
